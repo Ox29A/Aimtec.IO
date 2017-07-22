@@ -56,6 +56,10 @@ namespace iTwitch.Module_System.Spell_Casting
             if (Helper.UnderTurret(ObjectManager.GetLocalPlayer(), true) && Variables.Menu["com.itwitch.misc"]["noWTurret"].Enabled)
                 return;
 
+            if (Variables.Menu["com.itwitch.combo"]["noWR"].Enabled &&
+                ObjectManager.GetLocalPlayer().HasBuff("TwitchFullAutomatic"))
+                return;
+
             var prediction = Variables.Spells[SpellSlot.W].GetPrediction(target);
 
             if (target.IsValidTarget(Variables.Spells[SpellSlot.W].Range) &&

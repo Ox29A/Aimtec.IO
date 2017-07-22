@@ -60,6 +60,7 @@ namespace iTwitch
                 miscMenu.Add(new MenuBool("autoYo", "Youmuus with R"));
                 miscMenu.Add(new MenuBool("noWTurret", "No W Under Turrets"));
                 miscMenu.Add(new MenuSlider("noWAA", "No W if x AA can kill", 0, 0, 10));
+                miscMenu.Add(new MenuBool("noWR", " No W while R Active", false));
                 miscMenu.Add(new MenuKeyBind("stealthrecall", "Stealth Recall", KeyCode.T, KeybindType.Press));
                 Variables.Menu.Add(miscMenu);
             }
