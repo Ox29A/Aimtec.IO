@@ -9,6 +9,17 @@ namespace iTwitch.Utils
     {
         #region Public Methods and Operators
 
+        public static bool UnderTurret(Obj_AI_Base unit, bool enemyTurretsOnly)
+        {
+            return UnderTurret(unit.Position, enemyTurretsOnly);
+        }
+
+        public static bool UnderTurret(Vector3 position, bool enemyTurretsOnly)
+        {
+            return
+                ObjectManager.Get<Obj_AI_Turret>().Any(turret => turret.IsValidTarget(950, enemyTurretsOnly, checkRangeFrom: position));
+        }
+
         public static float GetPassiveDamage(this Obj_AI_Base target, int stacks = -1)
         {
             if (!target.HasBuff("twitchdeadlyvenom"))

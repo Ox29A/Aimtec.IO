@@ -53,6 +53,9 @@ namespace iTwitch.Module_System.Spell_Casting
             if (target.Health < autoAttackDamage * Variables.Menu["com.itwitch.misc"]["noWAA"].Value)
                 return;
 
+            if (Helper.UnderTurret(ObjectManager.GetLocalPlayer(), true) && Variables.Menu["com.itwitch.misc"]["noWTurret"].Enabled)
+                return;
+
             var prediction = Variables.Spells[SpellSlot.W].GetPrediction(target);
 
             if (target.IsValidTarget(Variables.Spells[SpellSlot.W].Range) &&
