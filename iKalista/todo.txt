@@ -1,0 +1,21 @@
+Only Kalista script with actual perfect E calculation
+E Calculation factors in all scenarios including shields, masteries, damage modifiers(exhaust etc)
+Custom target selection
+Q through minions
+Advanced Q logic for high accuracy. Will only use Q while dashing if it's an accurate shot.
+Q - AA reset
+Helps you get extra cs by using E on minions you can't last hit in time. Will give you an extra 5 - 10 cs more than just using an orbwalker alone.
+Uses E on fleeing enemies based on how you set it.
+Auto execute if target can die from E. Including minions and jungle monsters.
+Auto-E harass: If a spear is lodged inside an enemy champion and another one on a minion that is about to die, uses E.
+Use items in combo with options including QSS.
+Dash off minions if enemy out of range
+Advanced Laneclear Key: It attacks minion until it can be killed with E then switches to the next and when it reaches the specified amount to kill (usually 2) it will E execute them [Do not put on same key as orbwalker laneclear. They are used in different situation]
+Wall Dash Helper
+Save ally with ult from dangerous spells or low life
+Uses E right before you are about to die
+Auto level spells
+Auto buy starting itms
+Packet Cast spells
+Supports SxOrb, SAC:R, Nebelwolfi Orb and MMA
+Advanced E Damage drawings:
