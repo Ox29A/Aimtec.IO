@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Aimtec;
-using Aimtec.SDK.Damage;
-using Aimtec.SDK.Damage.JSON;
 using Aimtec.SDK.Extensions;
 
 namespace iTwitch.Utils
@@ -64,23 +59,22 @@ namespace iTwitch.Utils
             return ObjectManager.Player.CalcDamage(target, Damage.DamageType.Physical, calculatedDamage) + (includePassive ? GetPassiveDamage(target) : 0);
             */
             var countBuffs = target.BuffManager.GetBuffCount("TwitchDeadlyVenom");
-            return (countBuffs * new double[] { 15, 20, 25, 30, 35 }[ObjectManager.GetLocalPlayer().SpellBook.GetSpell(SpellSlot.E).Level - 1]
-                    + 0.2 * ObjectManager.GetLocalPlayer().TotalAbilityDamage
-                    + 0.25 * ObjectManager.GetLocalPlayer().FlatPhysicalDamageMod) +
-                   new double[] { 20, 35, 50, 65, 80 }[ObjectManager.GetLocalPlayer().SpellBook.GetSpell(SpellSlot.E).Level - 1];
-           // return ObjectManager.GetLocalPlayer().GetSpellDamage(target, SpellSlot.E, DamageStage.Buff);
+            return countBuffs *
+                   new double[] {15, 20, 25, 30, 35}[
+                       ObjectManager.GetLocalPlayer().SpellBook.GetSpell(SpellSlot.E).Level - 1]
+                   + 0.2 * ObjectManager.GetLocalPlayer().TotalAbilityDamage
+                   + 0.25 * ObjectManager.GetLocalPlayer().FlatPhysicalDamageMod +
+                   new double[] {20, 35, 50, 65, 80}[
+                       ObjectManager.GetLocalPlayer().SpellBook.GetSpell(SpellSlot.E).Level - 1];
+            // return ObjectManager.GetLocalPlayer().GetSpellDamage(target, SpellSlot.E, DamageStage.Buff);
         }
 
-        public static int GetPoisonStacks(this Obj_AI_Base target)
-        {
-            return target.GetBuffCount("TwitchDeadlyVenom");
-        }
+        public static int GetPoisonStacks(this Obj_AI_Base target) => target.GetBuffCount("TwitchDeadlyVenom");
 
-        public static float GetRealHealth(this Obj_AI_Base target)
-        {
-            return
-                target.Health + (target.PhysicalShield > 0 ? target.PhysicalShield : 0);
-        }
+        public static float GetRealHealth(this Obj_AI_Base target) => target.Health +
+                                                                      (target.PhysicalShield > 0
+                                                                          ? target.PhysicalShield
+                                                                          : 0);
 
         public static float GetRemainingBuffTime(this Obj_AI_Base target, string buffName)
         {
@@ -91,10 +85,8 @@ namespace iTwitch.Utils
                     .FirstOrDefault() - Game.TickCount;
         }
 
-        public static bool IsPoisonKillable(this Obj_AI_Base target)
-        {
-            return GetPoisonDamage(target) >= GetRealHealth(target);
-        }
+        public static bool IsPoisonKillable(this Obj_AI_Base target) =>
+            GetPoisonDamage(target) >= GetRealHealth(target);
 
         #endregion
     }

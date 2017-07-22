@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Aimtec;
 using Aimtec.SDK.Menu;
 using Aimtec.SDK.Orbwalking;
@@ -22,8 +18,5 @@ namespace iTwitch.Utils
 
         public static Menu Menu { get; set; }
         public static Orbwalker Orbwalker { get; set; }
-
-
-
     }
 }

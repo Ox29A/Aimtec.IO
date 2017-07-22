@@ -5,7 +5,6 @@ namespace iTwitch.Module_System.Enumerations
     /// <summary>
     ///     An Enumeration representing the different ModuleTypes
     /// </summary>
-    
     [Flags]
     internal enum ModuleType
     {

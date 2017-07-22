@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Aimtec;
 using Aimtec.SDK.Util;
 using iTwitch.Module_System.Enumerations;
@@ -10,17 +6,11 @@ using iTwitch.Utils;
 
 namespace iTwitch.Module_System.Misc
 {
-    class StealthRecall : IModule
+    internal class StealthRecall : IModule
     {
-        public string GetName()
-        {
-            return "Stealth Recall Module";
-        }
+        public string GetName() => "Stealth Recall Module";
 
-        public string GetDescription()
-        {
-            return "Handles the stealth recall aspect of the assembly";
-        }
+        public string GetDescription() => "Handles the stealth recall aspect of the assembly";
 
         public void OnLoad()
         {
@@ -29,14 +19,17 @@ namespace iTwitch.Module_System.Misc
             SpellBook.OnCastSpell += OnSpellCast;
         }
 
-        public bool CanExecute()
-        {
-            return Variables.Spells[SpellSlot.Q].Ready && Variables.Menu["com.itwitch.misc"]["stealthrecall"].Enabled;
-        }
+        public bool CanExecute() => Variables.Spells[SpellSlot.Q].Ready;
 
         public void Execute()
         {
+            if (Variables.Menu["com.itwitch.misc"]["stealthrecall"].Enabled)
+                ObjectManager.GetLocalPlayer().SpellBook.CastSpell(SpellSlot.Recall);
         }
+
+        public ModulePriority GetPriority() => ModulePriority.Low;
+
+        public ModuleType GetModuleType() => ModuleType.OnUpdate;
 
         private void OnSpellCast(Obj_AI_Base sender, SpellBookCastSpellEventArgs e)
         {
@@ -44,20 +37,9 @@ namespace iTwitch.Module_System.Misc
                 return;
 
             if (e.Slot == SpellSlot.Recall && Variables.Spells[SpellSlot.Q].Ready)
-            {
-                DelayAction.Queue((int)ObjectManager.GetLocalPlayer().SpellBook.GetSpell(SpellSlot.Q).SpellData.SpellCastTime + 300,
+                DelayAction.Queue(
+                    (int) ObjectManager.GetLocalPlayer().SpellBook.GetSpell(SpellSlot.Q).SpellData.SpellCastTime + 300,
                     () => ObjectManager.GetLocalPlayer().SpellBook.CastSpell(SpellSlot.Recall));
-            }
-        }
-
-        public ModulePriority GetPriority()
-        {
-            return ModulePriority.Low;
-        }
-
-        public ModuleType GetModuleType()
-        {
-            return ModuleType.OnUpdate;
         }
     }
 }

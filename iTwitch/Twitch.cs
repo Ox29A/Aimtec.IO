@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Aimtec;
 using Aimtec.SDK.Menu;
 using Aimtec.SDK.Menu.Components;
@@ -10,13 +6,21 @@ using Aimtec.SDK.Orbwalking;
 using Aimtec.SDK.Prediction.Skillshots;
 using Aimtec.SDK.Util;
 using iTwitch.Module_System;
-using Variables = iTwitch.Utils.Variables;
+using iTwitch.Utils;
 
 namespace iTwitch
 {
     internal class Twitch
     {
         private ModuleManager _moduleManager;
+
+        #region Events
+
+        private void OnDraw(EventArgs args)
+        {
+        }
+
+        #endregion
 
         #region Public Methods and Operators
 
@@ -34,7 +38,7 @@ namespace iTwitch
             _moduleManager = new ModuleManager();
             _moduleManager.OnLoad();
         }
-        
+
         private void LoadMenu()
         {
             Variables.Menu = new Menu("com.itwitch", "iTwitch", true);
@@ -66,14 +70,6 @@ namespace iTwitch
         private void LoadSpells()
         {
             Variables.Spells[SpellSlot.W].SetSkillshot(0.25f, 120f, 1400f, false, SkillshotType.Circle);
-        }
-
-        #endregion
-
-        #region Events
-
-        private void OnDraw(EventArgs args)
-        {
         }
 
         #endregion

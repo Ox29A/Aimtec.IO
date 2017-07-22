@@ -32,9 +32,7 @@ namespace iTwitch.Module_System.Spell_Casting
             #region OnUpdate
 
             if (ObjectManager.Get<Obj_AI_Hero>().Any(x => x.IsValidTarget(1100) && x.GetPoisonDamage() > x.Health))
-            {
                 Variables.Spells[SpellSlot.E].Cast();
-            }
 
             if (Variables.Menu["com.itwitch.misc"]["ebeforedeath"].Enabled &&
                 ObjectManager.GetLocalPlayer().HealthPercent() < 5 &&

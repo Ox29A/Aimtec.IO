@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Aimtec;
 using iTwitch.Module_System.Enumerations;
@@ -21,13 +20,12 @@ namespace iTwitch.Module_System
 
             Game.OnUpdate += OnUpdate;
         }
-        
+
         private void OnUpdate()
         {
-            foreach (var module in _moduleList.Where(x => x.CanExecute() && x.GetModuleType().HasFlag(ModuleType.OnUpdate)))
-            {
+            foreach (var module in _moduleList.Where(x => x.CanExecute() &&
+                                                          x.GetModuleType().HasFlag(ModuleType.OnUpdate)))
                 module.Execute();
-            }
         }
     }
 }
