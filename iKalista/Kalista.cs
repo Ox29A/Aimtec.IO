@@ -67,6 +67,8 @@ namespace iKalista
             {
                 miscMenu.Add(new MenuBool("forceW", "Focus Targets With Passive Buff"));
             }
+
+            Variables.Menu.Attach();
         }
 
         private void LoadSpells()
