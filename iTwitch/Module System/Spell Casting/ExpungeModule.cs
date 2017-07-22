@@ -31,11 +31,9 @@ namespace iTwitch.Module_System.Spell_Casting
         {
             #region OnUpdate
 
-            if (GameObjects.EnemyHeroes.Any(x => x.IsPoisonKillable() &&
-                                                 x.IsValidTarget(Variables.Spells[SpellSlot.E].Range)))
+            if (ObjectManager.Get<Obj_AI_Hero>().Any(x => x.IsValidTarget(1100) && x.GetPoisonDamage() > x.Health))
             {
                 Variables.Spells[SpellSlot.E].Cast();
-                Console.WriteLine("Auto E Killed Enemy kappa");
             }
 
             if (Variables.Menu["com.itwitch.misc"]["ebeforedeath"].Enabled &&

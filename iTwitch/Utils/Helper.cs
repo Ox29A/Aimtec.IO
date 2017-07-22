@@ -42,8 +42,7 @@ namespace iTwitch.Utils
 
         public static double GetPoisonDamage(this Obj_AI_Base target, bool includePassive = false)
         {
-            if (target == null || !target.HasBuff("twitchdeadlyvenom") || target.IsInvulnerable
-                || target.IsInvulnerable ||
+            if (target == null || !target.HasBuff("twitchdeadlyvenom") || target.IsInvulnerable ||
                 target.HasBuff("KindredRNoDeathBuff")
                 || target.HasBuffOfType(BuffType.SpellShield))
                 return 0;

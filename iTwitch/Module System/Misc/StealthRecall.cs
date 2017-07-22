@@ -52,7 +52,7 @@ namespace iTwitch.Module_System.Misc
 
         public ModulePriority GetPriority()
         {
-            return ModulePriority.High;
+            return ModulePriority.Low;
         }
 
         public ModuleType GetModuleType()
