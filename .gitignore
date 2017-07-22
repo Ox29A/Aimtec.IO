@@ -259,3 +259,14 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/iKalista
+/iKalista/Utils
+/iKalista/todo.txt
+/iKalista/Settings.StyleCop
+/iKalista/Properties
+/iKalista/Program.cs
+/iKalista/Module System
+/iKalista/Kalista.cs
+/iKalista/iKalista.csproj
+/iKalista/App.config
+/iKalista
