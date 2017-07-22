@@ -7,6 +7,8 @@
 // </summary>
 // -------------------------------------------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Aimtec;
 using Aimtec.SDK.Damage;
@@ -32,15 +34,15 @@ namespace iKalista.Utils
         /// </summary>
         /// <param name="target">the target</param>
         /// <returns>true / false if target has buff??</returns>
-        public static bool HasRendBuff(this Obj_AI_Hero target) => target != null &&
+        public static bool HasRendBuff(this Obj_AI_Base target) => target != null &&
                                                                    target.HasBuff("kalistaexpungemarker");
 
-        public static bool IsRendKillable(this Obj_AI_Hero target)
+        public static bool IsRendKillable(this Obj_AI_Base target)
         {
             if (target == null || !target.IsValid || !target.HasRendBuff() || HasInvulnerability(target))
                 return false;
 
-            var damage = ObjectManager.GetLocalPlayer().GetSpellDamage(target, SpellSlot.E, DamageStage.Buff);
+            var damage = ObjectManager.GetLocalPlayer().GetSpellDamage(target, SpellSlot.E) + ObjectManager.GetLocalPlayer().GetSpellDamage(target, SpellSlot.E, DamageStage.Buff);
             return damage >= target.Health;
         }
 
@@ -49,8 +51,10 @@ namespace iKalista.Utils
         /// </summary>
         /// <param name="target">THE TARGET AGAIN</param>
         /// <returns>true / false given the buffs the target has kappa</returns>
-        public static bool HasInvulnerability(this Obj_AI_Hero target)
+        public static bool HasInvulnerability(this Obj_AI_Base hero)
         {
+            var target = hero as Obj_AI_Hero;
+
             if (target == null)
                 return false;
 

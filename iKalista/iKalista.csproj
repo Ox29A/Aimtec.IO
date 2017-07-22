@@ -52,6 +52,7 @@
     <Compile Include="Kalista.cs" />
     <Compile Include="Modules\impl\Combo\AutoEModule.cs" />
     <Compile Include="Modules\impl\Combo\AutoQModule.cs" />
+    <Compile Include="Modules\impl\Misc\JungleStealModule.cs" />
     <Compile Include="Modules\impl\Misc\KillstealModule.cs" />
     <Compile Include="Modules\Module.cs" />
     <Compile Include="Modules\ModuleMemeger.cs" />
