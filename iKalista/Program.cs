@@ -1,5 +1,5 @@
 ﻿using System;
-using iKalista.Module_System;
+using Aimtec.SDK.Events;
 
 namespace iKalista
 {
@@ -24,15 +24,8 @@ namespace iKalista
         */
         private static void Main(string[] args)
         {
-            var manager = new ModuleManager();
-            manager.OnLoad();
-
-            Console.WriteLine();
-            /*foreach (var module in manager._moduleList)
-            {
-                manager.GetAttributes(module.GetType());
-                Console.WriteLine();
-            }*/
+            var kalista = new Kalista();
+            GameEvents.GameStart += kalista.OnGameLoad;
         }
     }
 }
