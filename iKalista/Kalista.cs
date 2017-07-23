@@ -19,6 +19,7 @@ namespace iKalista
 
             //TODO dmg indicator
             Variables.Orbwalker = new Orbwalker();
+
             LoadSpells();
             LoadMenu();
 
@@ -33,32 +34,32 @@ namespace iKalista
 
             var comboMenu = new Menu("com.ikalista.combo", ">> Combo Options");
             {
-                var qSettings = new Menu("com.ikalista.combo.q", ">> Q Settings");
-                {
-                    qSettings.Add(new MenuBool("useQ", "Use Q"));
-                    qSettings.Add(new MenuSeperator("sep")); //--
-                    comboMenu.Add(qSettings);
-                }
+                comboMenu.Add(new MenuBool("useQ", "Use Q"));
+                comboMenu.Add(new MenuSeperator("sep")); //--                
 
-                //TODO 
+                comboMenu.Add(new MenuBool("useE", "Use E"));
+                comboMenu.Add(new MenuSlider("eStacks", "Min Percent to cast E Leaving", 10, 0, 25));
 
-                var eSettings = new Menu("com.ikalista.combo.e", ">> E Settings");
-                {
-                    eSettings.Add(new MenuBool("useE", "Use E"));
-                    eSettings.Add(new MenuBool("useELeaving", "Use E when target leaving range"));
-                    eSettings.Add(new MenuSlider("eLeavingPercent", "Min Percent to cast E Leaving", 50, 10));
-                    eSettings.Add(new MenuBool("autoEMinChamp", "Auto E Minion > Champion"));
-                    comboMenu.Add(eSettings);
-                }
+                comboMenu.Add(new MenuBool("useELeaving", "Use E when target leaving range"));
+                comboMenu.Add(new MenuSlider("eLeavingPercent", "Min Percent to cast E Leaving", 50, 10));
+                comboMenu.Add(new MenuBool("autoEMinChamp", "Auto E Minion > Champion"));
+                comboMenu.Add(new MenuSeperator("sep2"));
 
-                var ultSettings = new Menu("com.ikalista.combo.r", ">> Soulbound Settings");
-                {
-                    ultSettings.Add(new MenuBool("useR", "Save Ally with R"));
-                    ultSettings.Add(new MenuSlider("allyPercent", "Percent Health for ally to save", 20, 5));
-                    comboMenu.Add(ultSettings);
-                }
+                comboMenu.Add(new MenuBool("useR", "Save Ally with R"));
+                comboMenu.Add(new MenuSlider("allyPercent", "Percent Health for ally to save", 20, 5));
+                
                 Variables.Menu.Add(comboMenu);
             }
+
+            var jungleMenu = new Menu("com.ikalista.jungle", ">> Jungle Steal Settings");
+            {
+                jungleMenu.Add(new MenuBool("enabled", "Use Jungle Steal"));
+                jungleMenu.Add(new MenuBool("small", "Steal Small Minions"));
+                jungleMenu.Add(new MenuBool("large", "Steal Large Minions"));
+                jungleMenu.Add(new MenuBool("legendary", "Steal Legendary Minions"));
+                Variables.Menu.Add(jungleMenu);
+            }
+
             var harassMenu = new Menu("com.ikalista.harass", ">> Harass Options");
             {
             }
@@ -66,6 +67,8 @@ namespace iKalista
             var miscMenu = new Menu("com.ikalista.misc", ">> Misc Options");
             {
                 miscMenu.Add(new MenuBool("forceW", "Focus Targets With Passive Buff"));
+                miscMenu.Add(new MenuBool("autoEUnkillable", "Auto E unkillable minions"));
+                Variables.Menu.Add(miscMenu);
             }
 
             Variables.Menu.Attach();

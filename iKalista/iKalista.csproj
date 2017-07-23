@@ -52,14 +52,19 @@
     <Compile Include="Kalista.cs" />
     <Compile Include="Modules\impl\Combo\AutoEModule.cs" />
     <Compile Include="Modules\impl\Combo\AutoQModule.cs" />
+    <Compile Include="Modules\impl\Combo\ForceTargetModule.cs" />
+    <Compile Include="Modules\impl\Misc\BalistaModule.cs" />
     <Compile Include="Modules\impl\Misc\JungleStealModule.cs" />
     <Compile Include="Modules\impl\Misc\KillstealModule.cs" />
-    <Compile Include="Modules\Module.cs" />
+    <Compile Include="Modules\impl\Misc\SaveAllyModule.cs" />
+    <Compile Include="Modules\IModule.cs" />
+    <Compile Include="Modules\impl\Misc\UnkillableMinionModule.cs" />
     <Compile Include="Modules\ModuleMemeger.cs" />
     <Compile Include="Modules\ModuleType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\BuffExtensions.cs" />
+    <Compile Include="Utils\GameObjects.cs" />
     <Compile Include="Utils\Variables.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -68,8 +73,6 @@
   <ItemGroup>
     <Content Include="todo.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Modules\impl\Harass\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

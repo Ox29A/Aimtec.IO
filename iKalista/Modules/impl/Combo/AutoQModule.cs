@@ -8,8 +8,13 @@ using iKalista.Utils;
 
 namespace iKalista.Modules.impl.Combo
 {
-    internal class AutoQModule : IModule
+    internal class AutoQModule : IOnUpdateModule
     {
+        public void OnLoad()
+        {
+            
+        }
+
         public string GetName()
         {
             return "AutoQModule";
@@ -18,7 +23,7 @@ namespace iKalista.Modules.impl.Combo
         public bool ShouldExecute()
         {
             return Variables.Spells[SpellSlot.Q].Ready &&
-                   Variables.Menu["com.ikalista.combo.q"]["useQ"].Enabled && Variables.Orbwalker.Mode == OrbwalkingMode.Combo;
+                   Variables.Menu["com.ikalista.combo"]["useQ"].Enabled && Variables.Orbwalker.Mode == OrbwalkingMode.Combo;
         }
 
         public void Execute()
@@ -30,13 +35,18 @@ namespace iKalista.Modules.impl.Combo
 
             var prediction = Variables.Spells[SpellSlot.Q].GetPrediction(target);
 
-            if (prediction.HitChance >= HitChance.Medium && !Variables.Orbwalker.IsWindingUp && !ObjectManager.GetLocalPlayer().IsDashing())
+            if (prediction.HitChance >= HitChance.Medium && Variables.Orbwalker.IsWindingUp || !ObjectManager.GetLocalPlayer().IsDashing())
                 Variables.Spells[SpellSlot.Q].Cast(prediction.CastPosition);
         }
 
         public ModuleType GetModuleType()
         {
             return ModuleType.OnUpdate;
+        }
+
+        public void OnPostAttack(Obj_AI_Base sender, PostAttackEventArgs args)
+        {
+            
         }
     }
 }

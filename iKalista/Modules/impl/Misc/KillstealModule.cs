@@ -1,12 +1,20 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Aimtec;
+using Aimtec.SDK.Damage;
+using Aimtec.SDK.Damage.JSON;
 using Aimtec.SDK.Extensions;
 using iKalista.Utils;
 
 namespace iKalista.Modules.impl.Misc
 {
-    internal class KillstealModule : IModule
+    internal class KillstealModule : IOnUpdateModule
     {
+        public void OnLoad()
+        {
+            
+        }
+
         public string GetName()
         {
             return "KillstealModule";
@@ -14,13 +22,26 @@ namespace iKalista.Modules.impl.Misc
 
         public bool ShouldExecute()
         {
-            return Variables.Spells[SpellSlot.E].Ready && Variables.Menu["com.ikalista.combo.e"]["useE"].Enabled; // menu item
+            return Variables.Spells[SpellSlot.E].Ready && Variables.Menu["com.ikalista.combo"]["useE"].Enabled; // menu item
         }
 
         public void Execute()
         {
-            if (ObjectManager.Get<Obj_AI_Hero>().Any(x => x.IsValidTarget(1100) && x.IsRendKillable()))
-                Variables.Spells[SpellSlot.E].Cast();
+            foreach (var hero in GameObjects.EnemyHeroes.Where(x => x != null && x.IsValidSpellTarget()))
+            {
+                var damage = ObjectManager.GetLocalPlayer().GetSpellDamage(hero, SpellSlot.E)
+                             + ObjectManager.GetLocalPlayer().GetSpellDamage(hero, SpellSlot.E, DamageStage.Buff);
+
+                if (damage >= hero.Health)
+                {
+                    Variables.Spells[SpellSlot.E].Cast();
+                    Console.WriteLine("REKT FAM");
+                }
+                else
+                {
+                    Console.WriteLine("Not killable wtf?");
+                }
+            }
         }
 
         public ModuleType GetModuleType()

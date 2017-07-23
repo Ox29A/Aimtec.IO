@@ -7,14 +7,20 @@ using Aimtec.SDK.Extensions;
 using Aimtec.SDK.Orbwalking;
 using Aimtec.SDK.Util.Cache;
 using iKalista.Utils;
+using GameObjects = iKalista.Utils.GameObjects;
 
 namespace iKalista.Modules.impl.Combo
 {
-    internal class AutoEModule : IModule
+    internal class AutoEModule : IOnUpdateModule
     {
         public ModuleType GetModuleType()
         {
             return ModuleType.OnUpdate;
+        }
+
+        public void OnLoad()
+        {
+            Console.WriteLine("Loaded Module: "+this.GetName());
         }
 
         public string GetName()
@@ -31,13 +37,14 @@ namespace iKalista.Modules.impl.Combo
         {
             if (Variables.Orbwalker.Mode == OrbwalkingMode.Combo)
             {
-                if (Variables.Menu["com.ikalista.combo.e"]["useE"].Enabled)
+                //Console.WriteLine("Execute");
+                if (Variables.Menu["com.ikalista.combo"]["useE"].Enabled)
                 {
                     foreach (
                         var target in
                         GameObjects.EnemyHeroes.Where(
                             x => x.IsValid && x.HasRendBuff() && x.IsValidTarget(Variables.Spells[SpellSlot.E].Range)))
-                        if (target.GetRendBuffCount() >= Variables.Menu["com.ikalista.combo.e"]["eStacks"].Value)
+                        if (target.GetRendBuffCount() >= Variables.Menu["com.ikalista.combo"]["eStacks"].Value)
                         {
                             Variables.Spells[SpellSlot.E].Cast();
                         }
@@ -52,8 +59,8 @@ namespace iKalista.Modules.impl.Combo
                     if (target == null) return;
                     var damage = Math.Ceiling(ObjectManager.GetLocalPlayer().GetSpellDamage(target, SpellSlot.E) * 100 /
                                               target.Health);
-                    if (damage >= Variables.Menu["com.ikalista.combo.e"]["eLeavingPercent"].Value &&
-                        target.ServerPosition.DistanceSqr(ObjectManager.GetLocalPlayer().ServerPosition) >
+                    if (damage >= Variables.Menu["com.ikalista.combo"]["eLeavingPercent"].Value &&
+                        target.ServerPosition.DistanceSquared(ObjectManager.GetLocalPlayer().ServerPosition) >
                         Math.Pow(Variables.Spells[SpellSlot.E].Range * 0.8, 2))
                     {
                         Variables.Spells[SpellSlot.E].Cast();
@@ -64,8 +71,8 @@ namespace iKalista.Modules.impl.Combo
             if (Variables.Menu["com.ikalista.combo"]["autoEMinChamp"].Enabled && Variables.Orbwalker.Mode != OrbwalkingMode.None)
             {
                 var enemy =
-                    GameObjects.EnemyHeroes.Where(hero => hero.HasRendBuff()).MinBy(hero => hero.Distance(ObjectManager.GetLocalPlayer()));
-                if (!(enemy.DistanceSqr(ObjectManager.GetLocalPlayer()) < Math.Pow(Variables.Spells[SpellSlot.E].Range + 200, 2)))
+                    GameObjects.EnemyHeroes.Where(hero => hero.HasRendBuff()).OrderBy(hero => hero.Distance(ObjectManager.GetLocalPlayer())).FirstOrDefault();
+                if (enemy != null && !(ObjectManager.GetLocalPlayer().Distance(enemy.ServerPosition) < Math.Pow(Variables.Spells[SpellSlot.E].Range + 200, 2)))
                     return;
                 if (
                     ObjectManager.Get<Obj_AI_Minion>()
