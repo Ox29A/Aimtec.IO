@@ -1,10 +1,11 @@
-﻿using System;
-using System.Linq;
-using Aimtec;
-using Aimtec.SDK.Extensions;
-
-namespace iTwitch.Utils
+﻿namespace iTwitch.Utils
 {
+    using System;
+    using System.Linq;
+
+    using Aimtec;
+    using Aimtec.SDK.Extensions;
+
     internal static class Helper
     {
         #region Public Methods and Operators
@@ -77,6 +78,7 @@ namespace iTwitch.Utils
                    + 0.25 * ObjectManager.GetLocalPlayer().FlatPhysicalDamageMod +
                    new double[] {20, 35, 50, 65, 80}[
                        ObjectManager.GetLocalPlayer().SpellBook.GetSpell(SpellSlot.E).Level - 1];
+
             // return ObjectManager.GetLocalPlayer().GetSpellDamage(target, SpellSlot.E, DamageStage.Buff);
         }
 

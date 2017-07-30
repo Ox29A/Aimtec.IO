@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A402E436-BF1C-4B47-90C1-9B5555EC35B5}</ProjectGuid>
+    <ProjectGuid>{07E4AB19-CF4A-4BAF-AF99-EECE3EB68AEA}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>iKalista</RootNamespace>
-    <AssemblyName>iKalista</AssemblyName>
+    <RootNamespace>iLulu</RootNamespace>
+    <AssemblyName>iLulu</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -41,6 +41,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,30 +50,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Kalista.cs" />
-    <Compile Include="Modules\impl\Combo\AutoEModule.cs" />
-    <Compile Include="Modules\impl\Combo\AutoQModule.cs" />
-    <Compile Include="Modules\impl\Combo\ForceTargetModule.cs" />
-    <Compile Include="Modules\impl\Misc\BalistaModule.cs" />
-    <Compile Include="Modules\impl\Misc\JungleStealModule.cs" />
-    <Compile Include="Modules\impl\Misc\KillstealModule.cs" />
-    <Compile Include="Modules\impl\Misc\SaveAllyModule.cs" />
-    <Compile Include="Modules\IModule.cs" />
-    <Compile Include="Modules\impl\Misc\UnkillableMinionModule.cs" />
-    <Compile Include="Modules\ModuleGenerator.cs" />
-    <Compile Include="Modules\ModuleMemeger.cs" />
-    <Compile Include="Modules\ModuleType.cs" />
+    <Compile Include="Interfaces\IModule.cs" />
+    <Compile Include="Lulu.cs" />
+    <Compile Include="Managers\MenuManager.cs" />
+    <Compile Include="Managers\ModuleManager.cs" />
+    <Compile Include="Managers\PixManager.cs" />
+    <Compile Include="Modules\Combo\CastEModule.cs" />
+    <Compile Include="Modules\Combo\CastRModule.cs" />
+    <Compile Include="Modules\Combo\CastWModule.cs" />
+    <Compile Include="Modules\Combo\CastQModule.cs" />
+    <Compile Include="Modules\OnSpellCastModules\AutoSpellInitiators.cs" />
+    <Compile Include="Modules\OnSpellCastModules\SpecialSpellsHelperModule.cs" />
+    <Compile Include="Modules\UpdateModules\AutoCaster.cs" />
+    <Compile Include="Modules\UpdateModules\AutoSaver.cs" />
+    <Compile Include="Modules\UpdateModules\SkillshotShielder.cs" />
+    <Compile Include="Modules\UpdateModules\SpeedyGonzales.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\BuffExtensions.cs" />
-    <Compile Include="Utils\GameObjects.cs" />
+    <Compile Include="Utils\Helper.cs" />
     <Compile Include="Utils\Variables.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="todo.txt" />
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

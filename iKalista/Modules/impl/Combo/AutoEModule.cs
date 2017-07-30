@@ -25,12 +25,12 @@ namespace iKalista.Modules.impl.Combo
 
         public string GetName()
         {
-            return "AutoEModule";
+            return "Auto E Module";
         }
 
         public bool ShouldExecute()
         {
-            return Variables.Spells[SpellSlot.E].Ready;
+            return Variables.Spells[SpellSlot.E].Ready && Variables.Menu["com.ikalista.combo"][this.GetName()].Enabled;
         }
 
         public void Execute()
