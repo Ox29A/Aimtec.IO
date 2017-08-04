@@ -20,6 +20,8 @@
             Variables.Orbwalker = new Orbwalker();
             Variables.Orbwalker.Attach(Variables.Menu);
 
+            ZLib.ZLib.Attach(Variables.Menu);
+
             var comboSettings = new Menu("combo", ">> Combo Options");
             {
                 var qSettings = new Menu("q", ">> Q Settings");

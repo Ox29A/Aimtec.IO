@@ -48,6 +48,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="ZLib">
+      <HintPath>C:\Users\Corey\AppData\Local\AimtecLoader\Data\System\ZLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces\IModule.cs" />
@@ -59,7 +62,7 @@
     <Compile Include="Modules\Combo\CastRModule.cs" />
     <Compile Include="Modules\Combo\CastWModule.cs" />
     <Compile Include="Modules\Combo\CastQModule.cs" />
-    <Compile Include="Modules\OnSpellCastModules\AutoSpellInitiators.cs" />
+    <Compile Include="Modules\OnSpellCastModules\ExampleModuleArguments.cs" />
     <Compile Include="Modules\OnSpellCastModules\SpecialSpellsHelperModule.cs" />
     <Compile Include="Modules\UpdateModules\AutoCaster.cs" />
     <Compile Include="Modules\UpdateModules\AutoSaver.cs" />

@@ -5,6 +5,7 @@
     using System.Linq;
 
     using Aimtec;
+    using Aimtec.SDK.Orbwalking;
 
     using iLulu.Interfaces;
     using iLulu.Modules.Combo;
@@ -24,12 +25,12 @@
                                                                 new CastQModule(),
                                                                 new CastWModule(),
                                                                 new CastEModule(),
-                                                                new AutoSaver(),
+                                                                new CastRModule(),
+
                                                                 new AutoCaster(),
+                                                                new AutoSaver(),
                                                                 new SpeedyGonzales(),
-                                                                // Spell Cast Modules
-                                                                new SpecialSpellsHelperModule(),
-                                                                new AutoSpellInitiators()
+                                                                new SpecialSpellsHelperModule()
                                                             };
 
         /// <summary>
@@ -40,16 +41,15 @@
             foreach (var module in Modules) module.OnLoad();
 
             Game.OnUpdate += OnUpdate;
-            Obj_AI_Base.OnProcessSpellCast += OnSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += RunEventModule;
+            Orbwalker.Implementation.PostAttack += RunEventModule;
         }
 
-        private static void OnSpellCast(Obj_AI_Base sender, Obj_AI_BaseMissileClientDataEventArgs args)
+        public static void RunEventModule<T, TE>(T sender, TE args)
         {
-            foreach (var module in Modules.Where(
-                x => x.CanExecute() && x.GetType().GetInterfaces().Contains(typeof(ISpellCastModule))))
+            foreach (var module in Modules.Where(x => x.CanExecute() && x.GetType().GetInterfaces().Contains(typeof(IEventModule<T, TE>))))
             {
-                var spellCastModule = module as ISpellCastModule;
-                spellCastModule?.Execute(sender, args);
+                (module as IEventModule<T, TE>)?.Execute(sender, args);
             }
         }
 

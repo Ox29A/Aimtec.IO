@@ -1,11 +1,13 @@
 ﻿namespace iLulu.Modules.Combo
 {
     using System;
+    using System.Linq;
 
     using Aimtec;
     using Aimtec.SDK.Extensions;
     using Aimtec.SDK.Orbwalking;
     using Aimtec.SDK.TargetSelector;
+    using Aimtec.SDK.Util.Cache;
 
     using iLulu.Interfaces;
     using iLulu.Utils;
@@ -30,7 +32,6 @@
         public bool CanExecute()
         {
             return Variables.Orbwalker.Mode == OrbwalkingMode.Combo
-                && Variables.Menu["combo"]["e"]["useE"].Enabled 
                 && Variables.Spells[SpellSlot.E].Ready;
         }
 
@@ -38,7 +39,9 @@
         {
             var target = TargetSelector.GetTarget(Variables.Spells[SpellSlot.E].Range);
 
-            if (target != null && target.IsValidTarget(Variables.Spells[SpellSlot.E].Range) && ObjectManager.GetLocalPlayer().CountAllyHeroesInRange(1200) > 0)
+            Console.WriteLine("Allys in range: " + ObjectManager.GetLocalPlayer().CountAllyHeroesInRange(1200));
+
+            if (target != null && target.IsValidTarget(Variables.Spells[SpellSlot.E].Range) && ObjectManager.GetLocalPlayer().CountAllyHeroesInRange(1200) < 1)
             {
                 Variables.Spells[SpellSlot.E].CastOnUnit(target);
             }

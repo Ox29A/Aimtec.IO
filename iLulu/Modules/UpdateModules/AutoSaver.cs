@@ -32,13 +32,15 @@ namespace iLulu.Modules.UpdateModules
 
         public bool CanExecute()
         {
-            return Variables.Menu["autoShield"]["useE"].Enabled || Variables.Menu["autoShield"]["useR"].Enabled;
+            return Variables.Menu["autoShield"]["useE"].Enabled;
         }
 
         public void Execute()
         {
-            foreach (var selectedAlly in GameObjects.AllyHeroes.Where(x => x.CountEnemyHeroesInRange(500) > 0))
+            Console.WriteLine("Executing module cast e shielding");
+            foreach (var selectedAlly in GameObjects.AllyHeroes.Where(x => x.CountEnemyHeroesInRange(1200) > 0))
             {
+                Console.WriteLine(selectedAlly.ChampionName);
                 if (Variables.Menu["autoShield"]["prior"][selectedAlly.ChampionName + "EPriority"].Value == 0)
                     return;
 
@@ -51,7 +53,7 @@ namespace iLulu.Modules.UpdateModules
 
                 if (!Variables.Spells[SpellSlot.E].Ready && ObjectManager.GetLocalPlayer().Distance(selectedAlly) <= Variables.Spells[SpellSlot.R].Range
                     && selectedAlly.HealthPercent()
-                    <= Variables.Menu["autoShield"]["prior"][selectedAlly.ChampionName + "EPriority"].Value)
+                    <= Variables.Menu["autoShield"]["prior"][selectedAlly.ChampionName + "EPriority"].Value && Variables.Menu["autoShield"]["useR"].Enabled)
                 {
                     Variables.Spells[SpellSlot.R].CastOnUnit(selectedAlly);
                 }

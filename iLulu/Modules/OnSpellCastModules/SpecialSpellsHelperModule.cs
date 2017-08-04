@@ -6,7 +6,7 @@
     using iLulu.Interfaces;
     using iLulu.Utils;
 
-    internal class SpecialSpellsHelperModule : ISpellCastModule
+    internal class SpecialSpellsHelperModule : IEventModule<Obj_AI_Base, Obj_AI_BaseMissileClientDataEventArgs>
     {
         public bool CanExecute() => Variables.Spells[SpellSlot.W].Ready || Variables.Spells[SpellSlot.E].Ready;
 

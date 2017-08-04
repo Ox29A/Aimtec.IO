@@ -34,8 +34,8 @@
         void Execute();
     }
 
-    internal interface ISpellCastModule : IModule
+    internal interface IEventModule<in T, in TE> : IModule
     {
-        void Execute(Obj_AI_Base sender, Obj_AI_BaseMissileClientDataEventArgs args);
+        void Execute(T sender, TE args);
     }
 }
