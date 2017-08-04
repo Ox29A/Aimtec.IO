@@ -48,6 +48,8 @@
                 var eSettings = new Menu("e", ">> E Settings");
                 {
                     eSettings.Add(new MenuBool("useE", "Use E on enemies", false));
+                    eSettings.Add(new MenuBool("eq", "Use E-Q when no allies around"));
+                    eSettings.Add(new MenuSeperator("1123", "Will only use E on enemies if no allies around"));
                     comboSettings.Add(eSettings);
                 }
 
