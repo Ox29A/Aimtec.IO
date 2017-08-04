@@ -63,7 +63,6 @@
                     if (minion != null)
                     {
                         Variables.Spells[SpellSlot.E].CastOnUnit(minion);
-                        Console.WriteLine("Casting E so we can Q: " + target.ChampionName);
                     }
                 }
             }

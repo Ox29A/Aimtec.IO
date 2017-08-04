@@ -37,10 +37,8 @@ namespace iLulu.Modules.UpdateModules
 
         public void Execute()
         {
-            Console.WriteLine("Executing module cast e shielding");
             foreach (var selectedAlly in GameObjects.AllyHeroes.Where(x => x.CountEnemyHeroesInRange(1200) > 0))
             {
-                Console.WriteLine(selectedAlly.ChampionName);
                 if (Variables.Menu["autoShield"]["prior"][selectedAlly.ChampionName + "EPriority"].Value == 0)
                     return;
 

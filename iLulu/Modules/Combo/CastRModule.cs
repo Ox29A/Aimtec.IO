@@ -25,13 +25,13 @@
 
         public void Execute()
         {
-            var ally = GameObjects.AllyHeroes.FirstOrDefault(x => x != null);
+            var ally = ObjectManager
+                .Get<Obj_AI_Hero>().FirstOrDefault(x => x.IsAlly && ObjectManager.GetLocalPlayer().Distance(x) <= Variables.Spells[SpellSlot.R].Range);
 
-            if (ally == null || ObjectManager.GetLocalPlayer().Distance(ally) < Variables.Spells[SpellSlot.R].Range)
-                return;
-
-            if (ally.CountEnemyHeroesInRange(300) >= Variables.Menu["combo"]["r"]["rAmount"].Value)
+            if (ally != null && ally.CountEnemyHeroesInRange(300) >= Variables.Menu["combo"]["r"]["rAmount"].Value)
+            {
                 Variables.Spells[SpellSlot.R].CastOnUnit(ally);
+            }
         }
     }
 }
