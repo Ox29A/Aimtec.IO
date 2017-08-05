@@ -86,19 +86,19 @@ namespace iLulu.Modules.UpdateModules
                         Variables.Spells[SpellSlot.E].CastOnUnit(objAiHero);
                         return;
                     }
+                }
 
-                    // Calculates the percent damage incoming to our ally.
-                    var incomingDamagePercent = sender.IncomeDamage * 100 / objAiHero.Health;
+                // Calculates the percent damage incoming to our ally.
+                var incomingDamagePercent = sender.IncomeDamage * 100 / objAiHero.Health;
 
-                    // Checks if our ally is going to die from incoming spell, or if the damage from the incoming spell will deal more then 50% health
-                    // Also checks if allys health percent is lower then given percent in menu, if any of the cases met, should cast E on ally.
-                    if (sender.IncomeDamage >= objAiHero.Health 
-                        || incomingDamagePercent >= 50 
-                        || objAiHero.HealthPercent()
-                        <= Variables.Menu["autoShield"]["prior"][objAiHero.ChampionName + "EPriority"].Value)
-                    {
-                        Variables.Spells[SpellSlot.E].CastOnUnit(objAiHero);
-                    }
+                // Checks if our ally is going to die from incoming spell, or if the damage from the incoming spell will deal more then 50% health
+                // Also checks if allys health percent is lower then given percent in menu, if any of the cases met, should cast E on ally.
+                if (sender.IncomeDamage >= objAiHero.Health
+                    || incomingDamagePercent >= 50
+                    || objAiHero.HealthPercent()
+                    <= Variables.Menu["autoShield"]["prior"][objAiHero.ChampionName + "EPriority"].Value)
+                {
+                    Variables.Spells[SpellSlot.E].CastOnUnit(objAiHero);
                 }
             }
         }
