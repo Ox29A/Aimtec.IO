@@ -13,8 +13,12 @@ namespace iLulu.Modules.UpdateModules
     using iLulu.Interfaces;
     using iLulu.Utils;
 
-    public class AutoSaver : IUpdateModule
+    using ZLib.Base;
+    using ZLib.Handlers;
+
+    public class AutoSaver : IEventModule<Unit, PredictDamageEventArgs>
     {
+
         public void OnLoad()
         {
             Console.WriteLine("Auto Saver Module Loaded");
@@ -32,7 +36,7 @@ namespace iLulu.Modules.UpdateModules
 
         public bool CanExecute()
         {
-            return Variables.Menu["autoShield"]["useE"].Enabled;
+            return Variables.Menu["autoShield"]["useE"].Enabled && Variables.Spells[SpellSlot.E].Ready;
         }
 
         public void Execute()
@@ -55,20 +59,47 @@ namespace iLulu.Modules.UpdateModules
                 {
                     Variables.Spells[SpellSlot.R].CastOnUnit(selectedAlly);
                 }
+            }
+        }
 
-                /*foreach (var skillshot in EvadeManager.DetectedSkillshots)
+        public void Execute(Unit sender, PredictDamageEventArgs args)
+        {
+            if (sender == null)
+                return;
+
+            // Cast to OBJ_AI_HERO
+            var objAiHero = sender.Instance as Obj_AI_Hero;
+
+            // Checks if we can cast our shield on ally.
+            var shouldCast = objAiHero != null && objAiHero.IsAlly && Variables.Menu["autoShield"]["prior"][objAiHero.ChampionName + "EPriority"].Value != 0;
+
+            // Checks if we should cast, and if the given ally is within range of our spell.
+            if (shouldCast && ObjectManager.GetLocalPlayer().Distance(objAiHero) <= Variables.Spells[SpellSlot.E].Range)
+            {
+                // Checks if any of the incoming spells are either crowd control spells, or Ultimates
+                if (sender.Events.Contains(EventType.CrowdControl) || sender.Events.Contains(EventType.Ultimate))
                 {
-                    var spellDamage =
-                        (skillshot.Unit as Obj_AI_Hero).GetSpellDamage(selectedAlly, skillshot.SpellData.Slot);
 
-                    if (skillshot.SpellData.IsDangerous && skillshot.SpellData.DangerValue >= 3 || (selectedAlly.Health <= spellDamage + 15))
+                    // Checks if any enemies are within 1000 units of our given ally.
+                    if (objAiHero.CountEnemyHeroesInRange(1000) > 0)
                     {
-                        if (skillshot.IsAboutToHit(100, selectedAlly))
-                        {
-
-                        }
+                        Variables.Spells[SpellSlot.E].CastOnUnit(objAiHero);
+                        return;
                     }
-                }*/
+
+                    // Calculates the percent damage incoming to our ally.
+                    var incomingDamagePercent = sender.IncomeDamage * 100 / objAiHero.Health;
+
+                    // Checks if our ally is going to die from incoming spell, or if the damage from the incoming spell will deal more then 50% health
+                    // Also checks if allys health percent is lower then given percent in menu, if any of the cases met, should cast E on ally.
+                    if (sender.IncomeDamage >= objAiHero.Health 
+                        || incomingDamagePercent >= 50 
+                        || objAiHero.HealthPercent()
+                        <= Variables.Menu["autoShield"]["prior"][objAiHero.ChampionName + "EPriority"].Value)
+                    {
+                        Variables.Spells[SpellSlot.E].CastOnUnit(objAiHero);
+                    }
+                }
             }
         }
     }

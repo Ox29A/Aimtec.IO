@@ -66,7 +66,6 @@
             Render.WorldToScreen(end, out screenOutEnd);
 
             // Render.Line(screenOutStart., from[1], to[0], to[1], width, color);
-
             Render.Line(screenOutStart.X, screenOutStart.Y, screenOutEnd.X, screenOutEnd.Y, color);
 
             // Drawing.DrawLine(from.X, from.Y, to.X, to.Y, width, color);
