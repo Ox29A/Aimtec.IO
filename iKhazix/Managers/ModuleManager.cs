@@ -1,38 +1,21 @@
-﻿namespace iLulu.Managers
+﻿namespace iKhazix.Managers
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using Aimtec;
     using Aimtec.SDK.Orbwalking;
 
-    using iLulu.Interfaces;
-    using iLulu.Modules.Combo;
-    using iLulu.Modules.OnSpellCastModules;
-    using iLulu.Modules.UpdateModules;
+    using iKhazix.Interfaces;
 
-    using ZLib;
-
-    /// <summary>
-    ///     The module manager.
-    /// </summary>
-    internal class ModuleManager
+    public class ModuleManager
     {
         /// <summary>
         ///     The modules.
         /// </summary>
         private static readonly List<IModule> Modules = new List<IModule>
                                                             {
-                                                                new CastQModule(),
-                                                                new CastWModule(),
-                                                                new CastEModule(),
-                                                                new CastRModule(),
-
-                                                                new AutoCaster(),
-                                                                new AutoSaver(),
-                                                                new SpeedyGonzales(),
-                                                                new SpecialSpellsHelperModule()
+                                                                // TODO
                                                             };
 
         /// <summary>
@@ -40,12 +23,12 @@
         /// </summary>
         public static void OnLoad()
         {
-            foreach (var module in Modules) module.OnLoad();
+            foreach (var module in Modules)
+                module.OnLoad();
 
             Game.OnUpdate += OnUpdate;
             Obj_AI_Base.OnProcessSpellCast += RunEventModule;
             Orbwalker.Implementation.PostAttack += RunEventModule;
-            ZLib.OnPredictDamage += RunEventModule;
         }
 
         public static void RunEventModule<T, TE>(T sender, TE args)

@@ -64,6 +64,7 @@ namespace iLulu.Modules.UpdateModules
 
         public void Execute(Unit sender, PredictDamageEventArgs args)
         {
+            // Checks if the sender is null
             if (sender == null)
                 return;
 

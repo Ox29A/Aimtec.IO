@@ -5,6 +5,7 @@
 
     using Aimtec;
     using Aimtec.SDK.Extensions;
+    using Aimtec.SDK.Orbwalking;
     using Aimtec.SDK.Prediction.Skillshots;
     using Aimtec.SDK.Util.Cache;
 
@@ -30,23 +31,6 @@
 
             Game.OnUpdate += OnUpdate;
             Render.OnRender += OnRender;
-
-            ZLib.OnPredictDamage += ZLibOnOnPredictDamage;
-        }
-
-        private static void ZLibOnOnPredictDamage(Unit unit, PredictDamageEventArgs args)
-        {
-            if (Variables.Spells[SpellSlot.E].Ready && unit.Instance.IsAlly && unit.Instance.Distance(ObjectManager.GetLocalPlayer()) <= Variables.Spells[SpellSlot.E].Range)
-            {
-                var damage = args.HpInstance.PredictedDmg;
-
-                if (damage >= unit.Instance.Health && unit.Events.Contains(EventType.Danger) 
-                    || unit.Events.Contains(EventType.Ultimate))
-                {
-                    Variables.Spells[SpellSlot.E].CastOnUnit(unit.Instance);
-                    Console.WriteLine(damage);
-                }
-            }
         }
 
         private void SetSkillshots()
