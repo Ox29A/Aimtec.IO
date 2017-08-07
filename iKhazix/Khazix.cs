@@ -18,7 +18,6 @@ namespace iKhazix
 
     public class Khazix
     {
-
         private static readonly JumpManager JumpManager = new JumpManager();
 
         public static void OnLoad()
@@ -56,7 +55,9 @@ namespace iKhazix
 
         private static void DoubleJump()
         {
-            if (!Variables.Spells[SpellSlot.E].Ready || !Variables.HasEvolvedE || !Variables.Menu["doubleJump"]["enabled"].Enabled || ObjectManager.GetLocalPlayer().IsDead ||ObjectManager.GetLocalPlayer().IsRecalling() || JumpManager.MidAssasination)
+            if (!Variables.Spells[SpellSlot.E].Ready || !Variables.HasEvolvedE ||
+                !Variables.Menu["doubleJump"]["enabled"].Enabled || ObjectManager.GetLocalPlayer().IsDead ||
+                ObjectManager.GetLocalPlayer().IsRecalling() || JumpManager.MidAssasination)
                 return;
 
             var targets = GameObjects.EnemyHeroes.Where(
@@ -102,17 +103,17 @@ namespace iKhazix
 
             switch (Variables.Orbwalker.Mode)
             {
-                    case OrbwalkingMode.Combo:
-                        Combo();
-                        break;
-                    case OrbwalkingMode.Mixed:
-                        Harass();
-                        break;
-                    case OrbwalkingMode.Laneclear:
-                        Laneclear();
-                        break;
+                case OrbwalkingMode.Combo:
+                    Combo();
+                    break;
+                case OrbwalkingMode.Mixed:
+                    Harass();
+                    break;
+                case OrbwalkingMode.Laneclear:
+                    Laneclear();
+                    break;
 
-                    //TODO add custom orbwalking mode.
+                //TODO add custom orbwalking mode.
             }
         }
 
@@ -134,108 +135,109 @@ namespace iKhazix
                 searchRange += Variables.Spells[SpellSlot.W].Range;
             }
 
-            var target = TargetSelector.GetTarget(searchRange);
+            Obj_AI_Hero target = null;
 
             foreach (var hero in GameObjects.EnemyHeroes.Where(x => x.IsValidTarget(searchRange) && !x.HasSpellShield() && !x.IsInvulnerable))
             {
-                if (hero.IsIsolated() || target.Health <= ObjectManager.GetLocalPlayer().GetBurstDamage(target))
+                if (hero.IsIsolated() || hero.Health <= ObjectManager.GetLocalPlayer().GetBurstDamage(hero))
                     target = hero;
+            }
+
+            if (target == null)
+            {
+                target = TargetSelector.GetTarget(searchRange);
             }
 
             if (target != null)
             {
-                if (target.IsIsolated() || target.Health <= ObjectManager.GetLocalPlayer().GetBurstDamage(target))
+                var distance = ObjectManager.GetLocalPlayer().Distance(target.ServerPosition);
+
+                if (Variables.Menu["combo"]["useQ"].Enabled && Variables.Spells[SpellSlot.Q].Ready &&
+                    !Variables.IsAirborne && distance <= Variables.Spells[SpellSlot.Q].Range)
                 {
-                    var distance = ObjectManager.GetLocalPlayer().Distance(target.ServerPosition);
+                    Variables.Spells[SpellSlot.Q].Cast();
+                }
 
-                    if (Variables.Menu["combo"]["useQ"].Enabled && Variables.Spells[SpellSlot.Q].Ready &&
-                        !Variables.IsAirborne && distance <= Variables.Spells[SpellSlot.Q].Range)
+                if (Variables.Menu["combo"]["useW"].Enabled && Variables.Spells[SpellSlot.W].Ready &&
+                    !Variables.HasEvolvedW && distance <= Variables.Spells[SpellSlot.E].Range)
+                {
+                    var prediction = Variables.Spells[SpellSlot.W].GetPrediction(target);
+                    if (prediction.HitChance >= Extensions.GetHitchance("wHitchance"))
                     {
-                        Variables.Spells[SpellSlot.Q].Cast();
+                        Variables.Spells[SpellSlot.W].Cast(prediction.CastPosition);
+                    }
+                }
+
+                if (Variables.Menu["combo"]["useE"].Enabled && Variables.Spells[SpellSlot.E].Ready &&
+                    !Variables.IsAirborne && distance <= Variables.Spells[SpellSlot.E].Range && distance >
+                    Variables.Spells[SpellSlot.Q].Range + (0.4 * ObjectManager.GetLocalPlayer().MoveSpeed))
+                {
+                    var jumpPosition = Extensions.GetJumpPosition(target);
+                    if (jumpPosition.ShouldJump)
+                    {
+                        Variables.Spells[SpellSlot.E].Cast(jumpPosition.Position);
+                    }
+                }
+
+                if (Variables.Menu["combo"]["useEGapcloseQ"].Enabled && Variables.Spells[SpellSlot.Q].Ready &&
+                    Variables.Spells[SpellSlot.E].Ready &&
+                    distance > Variables.Spells[SpellSlot.Q].Range +
+                    (0.4 * ObjectManager.GetLocalPlayer().MoveSpeed) && distance <=
+                    Variables.Spells[SpellSlot.E].Range + Variables.Spells[SpellSlot.Q].Range)
+                {
+                    var jumpPosition = Extensions.GetJumpPosition(target);
+                    if (jumpPosition.ShouldJump)
+                    {
+                        Variables.Spells[SpellSlot.E].Cast(jumpPosition.Position);
                     }
 
-                    if (Variables.Menu["combo"]["useW"].Enabled && Variables.Spells[SpellSlot.W].Ready &&
-                        !Variables.HasEvolvedW && distance <= Variables.Spells[SpellSlot.E].Range)
-                    {
-                        var prediction = Variables.Spells[SpellSlot.W].GetPrediction(target);
-                        if (prediction.HitChance >= Extensions.GetHitchance("wHitchance"))
-                        {
-                            Variables.Spells[SpellSlot.W].Cast(prediction.CastPosition);
-                        }
-                    }
-
-                    if (Variables.Menu["combo"]["useE"].Enabled && Variables.Spells[SpellSlot.E].Ready &&
-                        !Variables.IsAirborne && distance <= Variables.Spells[SpellSlot.E].Range && distance >
-                        Variables.Spells[SpellSlot.Q].Range + (0.4 * ObjectManager.GetLocalPlayer().MoveSpeed))
-                    {
-                        var jumpPosition = Extensions.GetJumpPosition(target);
-                        if (jumpPosition.ShouldJump)
-                        {
-                            Variables.Spells[SpellSlot.E].Cast(jumpPosition.Position);
-                        }
-                    }
-
-                    if (Variables.Menu["combo"]["useEGapcloseQ"].Enabled && Variables.Spells[SpellSlot.Q].Ready &&
-                        Variables.Spells[SpellSlot.E].Ready &&
-                        distance > Variables.Spells[SpellSlot.Q].Range +
-                        (0.4 * ObjectManager.GetLocalPlayer().MoveSpeed) && distance <=
-                        Variables.Spells[SpellSlot.E].Range + Variables.Spells[SpellSlot.Q].Range)
-                    {
-                        var jumpPosition = Extensions.GetJumpPosition(target);
-                        if (jumpPosition.ShouldJump)
-                        {
-                            Variables.Spells[SpellSlot.E].Cast(jumpPosition.Position);
-                        }
-
-                        if (Variables.Menu["combo"]["useRLongGap"].Enabled && Variables.Spells[SpellSlot.R].Ready)
-                        {
-                            Variables.Spells[SpellSlot.R].Cast();
-                        }
-                    }
-
-                    if (Variables.Spells[SpellSlot.R].Ready && !Variables.Spells[SpellSlot.Q].Ready &&
-                        !Variables.Spells[SpellSlot.W].Ready && !Variables.Spells[SpellSlot.E].Ready &&
-                        Variables.Menu["combo"]["useR"].Enabled &&
-                        ObjectManager.GetLocalPlayer().CountEnemyHeroesInRange(500) > 0)
+                    if (Variables.Menu["combo"]["useRLongGap"].Enabled && Variables.Spells[SpellSlot.R].Ready)
                     {
                         Variables.Spells[SpellSlot.R].Cast();
                     }
+                }
 
-                    //Evolved Spells
+                if (Variables.Spells[SpellSlot.R].Ready && !Variables.Spells[SpellSlot.Q].Ready &&
+                    !Variables.Spells[SpellSlot.W].Ready && !Variables.Spells[SpellSlot.E].Ready &&
+                    Variables.Menu["combo"]["useR"].Enabled &&
+                    ObjectManager.GetLocalPlayer().CountEnemyHeroesInRange(500) > 0)
+                {
+                    Variables.Spells[SpellSlot.R].Cast();
+                }
 
-                    if (Variables.Spells[SpellSlot.W].Ready && Variables.HasEvolvedW &&
-                        distance <= Variables.WeSpell.Range && Variables.Menu["combo"]["useW"].Enabled)
+                //Evolved Spells
+
+                if (Variables.Spells[SpellSlot.W].Ready && Variables.HasEvolvedW &&
+                    distance <= Variables.WeSpell.Range && Variables.Menu["combo"]["useW"].Enabled)
+                {
+                    var prediction = Variables.WeSpell.GetPrediction(target);
+                    if (prediction.HitChance >= Extensions.GetHitchance("wHitchance"))
                     {
-                        var prediction = Variables.WeSpell.GetPrediction(target);
-                        if (prediction.HitChance >= Extensions.GetHitchance("wHitchance"))
+                        CastWE(target, prediction.UnitPosition.To2D(), 0, Extensions.GetHitchance("wHitchance"));
+                    }
+                    if (prediction.HitChance >= HitChance.Collision)
+                    {
+                        var pCollision = prediction.CollisionObjects;
+                        var x =
+                            pCollision.FirstOrDefault(predCollisionChar => predCollisionChar.Distance(target) <= 30);
+                        if (x != null)
                         {
-                            CastWE(target, prediction.UnitPosition.To2D(), 0, Extensions.GetHitchance("wHitchance"));
-                        }
-                        if (prediction.HitChance >= HitChance.Collision)
-                        {
-                            var pCollision = prediction.CollisionObjects;
-                            var x = pCollision.FirstOrDefault(predCollisionChar => predCollisionChar.Distance(target) <= 30);
-                            if (x != null)
-                            {
-                                Variables.Spells[SpellSlot.W].Cast(x.Position);
-                            }
+                            Variables.Spells[SpellSlot.W].Cast(x.Position);
                         }
                     }
 
-                    // TODO items and smite??
 
+                    // TODO items and smite??
                 }
             }
         }
 
         private static void Harass()
         {
-            
         }
 
         private static void Laneclear()
         {
-            
         }
 
         private static void OnRender()
@@ -253,24 +255,26 @@ namespace iKhazix
                     Variables.Spells[SpellSlot.Q].CastOnUnit(target);
                 }
 
-                if (Variables.Spells[SpellSlot.W].Ready && distance <= Variables.Spells[SpellSlot.W].Range && !Variables.HasEvolvedW)
+                if (Variables.Spells[SpellSlot.W].Ready && distance <= Variables.Spells[SpellSlot.W].Range &&
+                    !Variables.HasEvolvedW)
                 {
                     var prediction = Variables.Spells[SpellSlot.W].GetPrediction(target);
                     if (prediction.HitChance >= Extensions.GetHitchance("wHitchance"))
                     {
                         Variables.Spells[SpellSlot.W].Cast(prediction.CastPosition);
                     }
-                } else if (Variables.Spells[SpellSlot.W].Ready && Variables.HasEvolvedW &&
-                           distance <= Variables.WeSpell.Range)
+                }
+                else if (Variables.Spells[SpellSlot.W].Ready && Variables.HasEvolvedW &&
+                         distance <= Variables.WeSpell.Range)
                 {
                     var prediction = Variables.WeSpell.GetPrediction(target);
                     CastWE(target, prediction.UnitPosition.To2D(), 0);
                 }
-
             }
         }
 
-        private static void CastWE(Obj_AI_Hero unit, Vector2 unitPosition, int minTargets = 0, HitChance hc = HitChance.Medium)
+        private static void CastWE(Obj_AI_Hero unit, Vector2 unitPosition, int minTargets = 0,
+            HitChance hc = HitChance.Medium)
         {
             var points = new List<Vector2>();
             var hitBoxes = new List<int>();
@@ -289,7 +293,7 @@ namespace iKhazix
                     continue;
 
                 points.Add(pos.UnitPosition.To2D());
-                hitBoxes.Add((int)enemy.BoundingRadius + 275);
+                hitBoxes.Add((int) enemy.BoundingRadius + 275);
             }
 
             var posiblePositions = new List<Vector2>();
@@ -358,7 +362,9 @@ namespace iKhazix
                     if (k == 2)
                         endPoint = startPoint + originalDirection.Rotated(-Variables.WAngle);
 
-                    if (point.Distance(startPoint, endPoint, true, true) < (Variables.Spells[SpellSlot.W].Width + hitBoxes[i]) * (Variables.Spells[SpellSlot.W].Width + hitBoxes[i]))
+                    if (point.Distance(startPoint, endPoint, true, true) <
+                        (Variables.Spells[SpellSlot.W].Width + hitBoxes[i]) *
+                        (Variables.Spells[SpellSlot.W].Width + hitBoxes[i]))
                     {
                         result++;
                         break;
