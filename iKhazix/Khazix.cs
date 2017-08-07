@@ -118,7 +118,6 @@ namespace iKhazix
 
         private static void Combo()
         {
-            Obj_AI_Hero target;
             var searchRange = ObjectManager.GetLocalPlayer().AttackRange;
 
             if (Variables.Spells[SpellSlot.Q].Ready)
@@ -135,7 +134,13 @@ namespace iKhazix
                 searchRange += Variables.Spells[SpellSlot.W].Range;
             }
 
-            target = TargetSelector.GetTarget(searchRange);
+            var target = TargetSelector.GetTarget(searchRange);
+
+            foreach (var hero in GameObjects.EnemyHeroes.Where(x => x.IsValidTarget(searchRange) && !x.HasSpellShield() && !x.IsInvulnerable))
+            {
+                if (hero.IsIsolated() || target.Health <= ObjectManager.GetLocalPlayer().GetBurstDamage(target))
+                    target = hero;
+            }
 
             if (target != null)
             {
