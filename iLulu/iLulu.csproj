@@ -64,12 +64,14 @@
     <Compile Include="Modules\Combo\CastQModule.cs" />
     <Compile Include="Modules\OnSpellCastModules\ExampleModuleArguments.cs" />
     <Compile Include="Modules\OnSpellCastModules\SpecialSpellsHelperModule.cs" />
+    <Compile Include="Modules\UpdateModules\AntigapcloserModule.cs" />
     <Compile Include="Modules\UpdateModules\AutoCaster.cs" />
     <Compile Include="Modules\UpdateModules\AutoSaver.cs" />
     <Compile Include="Modules\UpdateModules\SkillshotShielder.cs" />
     <Compile Include="Modules\UpdateModules\SpeedyGonzales.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\Gapcloser.cs" />
     <Compile Include="Utils\Helper.cs" />
     <Compile Include="Utils\Variables.cs" />
   </ItemGroup>

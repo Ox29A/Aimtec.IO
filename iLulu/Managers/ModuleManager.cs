@@ -11,6 +11,7 @@
     using iLulu.Modules.Combo;
     using iLulu.Modules.OnSpellCastModules;
     using iLulu.Modules.UpdateModules;
+    using iLulu.Utils;
 
     using ZLib;
 
@@ -32,7 +33,8 @@
                                                                 new AutoCaster(),
                                                                 new AutoSaver(),
                                                                 new SpeedyGonzales(),
-                                                                new SpecialSpellsHelperModule()
+                                                                new SpecialSpellsHelperModule(),
+                                                                new AntigapcloserModule()
                                                             };
 
         /// <summary>
@@ -46,6 +48,7 @@
             Obj_AI_Base.OnProcessSpellCast += RunEventModule;
             Orbwalker.Implementation.PostAttack += RunEventModule;
             ZLib.OnPredictDamage += RunEventModule;
+            Gapcloser.OnGapcloser += RunEventModule;
         }
 
         public static void RunEventModule<T, TE>(T sender, TE args)

@@ -65,7 +65,6 @@
             var autoShieldMenu = new Menu("autoShield", ">> Shield Settings");
             {
                 autoShieldMenu.Add(new MenuBool("useE", "Use E"));
-                autoShieldMenu.Add(new MenuBool("useR", "Use R"));
                 var priorityMenu = new Menu("prior", ">> Priority Settings");
                 {
                     foreach (var hero in GameObjects.AllyHeroes)
@@ -128,6 +127,8 @@
                 }
                 Variables.Menu.Add(miscMenu);
             }
+
+            Gapcloser.Attach(Variables.Menu, ">> Gapcloser Options");
 
             /*var evadeMenu = new Menu("evade", ">> Evade Menu");
             {
