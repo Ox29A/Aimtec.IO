@@ -17,11 +17,14 @@
     {
         public bool CanExecute()
         {
-            return Variables.Menu["speedy"]["key"].Enabled;
+            return true;
         }
 
         public void Execute()
         {
+            if (!Variables.Menu["speedy"]["key"].Enabled)
+                return;
+
             var target = GameObjects.AllyHeroes.Where(x => !x.IsMe)
                 .OrderByDescending(h => Variables.Menu["speedy"][h.ChampionName + "WEPriority"].Value).FirstOrDefault();
 
