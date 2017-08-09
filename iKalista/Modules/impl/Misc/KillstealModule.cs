@@ -27,7 +27,7 @@ namespace iKalista.Modules.impl.Misc
 
         public void Execute()
         {
-            foreach (var hero in GameObjects.EnemyHeroes.Where(x => x != null && x.IsValidSpellTarget()))
+            foreach (var hero in GameObjects.EnemyHeroes.Where(x => x != null && x.IsValidTarget()))
             {
                 var damage = ObjectManager.GetLocalPlayer().GetSpellDamage(hero, SpellSlot.E)
                              + ObjectManager.GetLocalPlayer().GetSpellDamage(hero, SpellSlot.E, DamageStage.Buff);

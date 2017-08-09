@@ -48,11 +48,6 @@
             return enemy == null || Variables.Menu[enemy.ChampionName + "WPriority"].Value == 0 ? null : enemy;
         }
 
-        public static bool IsAutoAttack(this SpellData spellData)
-        {
-            return IsAutoAttack(spellData.Name);
-        }
-
         public static bool IsAutoAttack(string name)
         {
             return name.ToLower().Contains("attack") && !NoAttacks.Contains(name.ToLower())
