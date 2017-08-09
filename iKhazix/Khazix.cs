@@ -1,20 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Aimtec;
-using Aimtec.SDK.Damage;
-using Aimtec.SDK.Damage.JSON;
-using Aimtec.SDK.Extensions;
-using Aimtec.SDK.Menu.Components;
-using Aimtec.SDK.Orbwalking;
-using Aimtec.SDK.Prediction.Skillshots;
-using Aimtec.SDK.TargetSelector;
-using Aimtec.SDK.Util;
-using Aimtec.SDK.Util.Cache;
-using iKhazix.Utils;
-
-namespace iKhazix
+﻿namespace iKhazix
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Aimtec;
+    using Aimtec.SDK.Damage;
+    using Aimtec.SDK.Extensions;
+    using Aimtec.SDK.Menu.Components;
+    using Aimtec.SDK.Orbwalking;
+    using Aimtec.SDK.Prediction.Skillshots;
+    using Aimtec.SDK.TargetSelector;
+    using Aimtec.SDK.Util;
+    using Aimtec.SDK.Util.Cache;
+
     using iKhazix.Managers;
+    using iKhazix.Utils;
 
     public class Khazix
     {
@@ -25,8 +25,11 @@ namespace iKhazix
             MenuManager.Initialize();
             SetSkillshots();
 
-
-            Variables.NexusPosition = new Vector3(200, 0, 0);
+            var gameObject = ObjectManager.Get<GameObject>()
+                .FirstOrDefault(
+                    x => x.Type == GameObjectType.obj_Shop && x.Team == ObjectManager.GetLocalPlayer().Team);
+            if (gameObject != null)
+                Variables.NexusPosition = gameObject.Position;
 
             Game.OnUpdate += OnUpdate;
             Game.OnUpdate += DoubleJump;
@@ -42,7 +45,7 @@ namespace iKhazix
             if (args.Slot == SpellSlot.Q && args.Target is Obj_AI_Hero &&
                 Variables.Menu["doubleJump"]["enabled"].Enabled)
             {
-                var target = (Obj_AI_Hero) args.Target;
+                var target = (Obj_AI_Hero)args.Target;
                 var qDamage = Extensions.GetCorrectQDamage(target);
                 var damage = ObjectManager.GetLocalPlayer().GetAutoAttackDamage(target) * 2 + qDamage;
 
@@ -76,9 +79,11 @@ namespace iKhazix
                     Variables.FirstJumpPoint = Extensions.GetDoubleJumpPoint(checkKillable);
                     Variables.Spells[SpellSlot.E].Cast(Variables.FirstJumpPoint.To2D());
                     Variables.Spells[SpellSlot.Q].Cast(checkKillable);
-                    DelayAction.Queue(Variables.Menu["doubleJump"]["EDelay"].Value + Game.Ping, () =>
-                    {
-                        if (Variables.Spells[SpellSlot.E].Ready)
+                    DelayAction.Queue(
+                        Variables.Menu["doubleJump"]["EDelay"].Value + Game.Ping,
+                        () =>
+                            {
+                                if (Variables.Spells[SpellSlot.E].Ready)
                         {
                             Variables.SecondJumpPoint = Extensions.GetDoubleJumpPoint(checkKillable, false);
                             Variables.Spells[SpellSlot.E].Cast(Variables.SecondJumpPoint.To2D());
