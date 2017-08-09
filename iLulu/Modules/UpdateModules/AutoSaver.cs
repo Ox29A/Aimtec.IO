@@ -90,7 +90,7 @@ namespace iLulu.Modules.UpdateModules
                 }
 
                 // Calculates the percent damage incoming to our ally.
-                var incomingDamagePercent = sender.IncomeDamage * 100 / objAiHero.Health;
+                var incomingDamagePercent = sender.IncomeDamage * 100 / sender.Instance.Health;
 
                 // Checks if our ally is going to die from incoming spell, or if the damage from the incoming spell will deal more then 50% health
                 // Also checks if allys health percent is lower then given percent in menu, if any of the cases met, should cast E on ally.
