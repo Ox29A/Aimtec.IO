@@ -69,37 +69,37 @@ namespace iLulu.Modules.UpdateModules
                 return;
 
             // Cast to OBJ_AI_HERO
-            var objAiHero = sender.Instance as Obj_AI_Hero;
+            var ally = sender.Instance as Obj_AI_Hero;
 
             // Checks if we can cast our shield on ally.
-            var shouldCast = objAiHero != null && objAiHero.IsAlly && Variables.Menu["autoShield"]["prior"][objAiHero.ChampionName + "EPriority"].Value != 0;
+            var shouldCast = ally != null && ally.IsAlly && Variables.Menu["autoShield"]["prior"][ally.ChampionName + "EPriority"].Value != 0;
 
             // Checks if we should cast, and if the given ally is within range of our spell.
-            if (shouldCast && ObjectManager.GetLocalPlayer().Distance(objAiHero) <= Variables.Spells[SpellSlot.E].Range)
+            if (shouldCast && ObjectManager.GetLocalPlayer().Distance(ally) <= Variables.Spells[SpellSlot.E].Range)
             {
                 // Checks if any of the incoming spells are either crowd control spells, or Ultimates
                 if (sender.Events.Contains(EventType.CrowdControl) || sender.Events.Contains(EventType.Ultimate))
                 {
 
                     // Checks if any enemies are within 1000 units of our given ally.
-                    if (objAiHero.CountEnemyHeroesInRange(1000) > 0)
+                    if (ally.CountEnemyHeroesInRange(1000) > 0)
                     {
-                        Variables.Spells[SpellSlot.E].CastOnUnit(objAiHero);
+                        Variables.Spells[SpellSlot.E].CastOnUnit(ally);
                         return;
                     }
                 }
 
                 // Calculates the percent damage incoming to our ally.
-                var incomingDamagePercent = sender.IncomeDamage * 100 / sender.Instance.Health;
+                var incomingDamagePercent = sender.IncomeDamage / sender.Instance.Health * 100;
 
                 // Checks if our ally is going to die from incoming spell, or if the damage from the incoming spell will deal more then 50% health
                 // Also checks if allys health percent is lower then given percent in menu, if any of the cases met, should cast E on ally.
-                if (sender.IncomeDamage >= objAiHero.Health
+                if (sender.IncomeDamage >= ally.Health
                     || incomingDamagePercent >= 50
-                    || objAiHero.HealthPercent()
-                    <= Variables.Menu["autoShield"]["prior"][objAiHero.ChampionName + "EPriority"].Value)
+                    || ally.HealthPercent()
+                    <= Variables.Menu["autoShield"]["prior"][ally.ChampionName + "EPriority"].Value)
                 {
-                    Variables.Spells[SpellSlot.E].CastOnUnit(objAiHero);
+                    Variables.Spells[SpellSlot.E].CastOnUnit(ally);
                 }
             }
         }

@@ -33,11 +33,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Aimtec">
-      <HintPath>C:\Users\Corey\AppData\Local\AimtecLoader\Data\System\Aimtec.dll</HintPath>
+    <Reference Include="Aimtec, Version=1.0.6420.25134, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\..\Downloads\Aimtec.IO-master\portable ref\Aimtec.dll</HintPath>
     </Reference>
-    <Reference Include="Aimtec.SDK">
-      <HintPath>C:\Users\Corey\AppData\Local\AimtecLoader\Data\System\Aimtec.SDK.dll</HintPath>
+    <Reference Include="Aimtec.SDK, Version=1.0.1.1, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\..\Downloads\Aimtec.IO-master\portable ref\Aimtec.SDK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
