@@ -5,37 +5,31 @@ namespace iKalista.Modules
 {
     internal interface IModule
     {
+        /// <summary>
+        ///     On Load
+        /// </summary>
         void OnLoad();
 
+        /// <summary>
+        ///     Gets the Module Name
+        /// </summary>
+        /// <returns>string</returns>
         string GetName();
 
+        /// <summary>
+        ///     Checks if the module can be executed
+        /// </summary>
+        /// <returns></returns>
         bool ShouldExecute();
-
-        ModuleType GetModuleType();
     }
 
-    internal interface IOnUpdateModule : IModule
+    internal interface IUpdateModule : IModule
     {
         void Execute();
     }
 
-    internal interface IPostAttackModule : IModule
+    internal interface IEventModule<in T, in TE> : IModule
     {
-        void OnPostAttack(Obj_AI_Base sender, PostAttackEventArgs args);
-    }
-
-    internal interface IPreAttackModule : IModule
-    {
-        void OnPreAttack(Obj_AI_Base sender, PreAttackEventArgs args);
-    }
-
-    internal interface ISpellCastModule : IModule
-    {
-        void OnSpellCast(Obj_AI_Base sender, Obj_AI_BaseMissileClientDataEventArgs args);
-    }
-
-    internal interface IUnkillableMinionModule : IModule
-    {
-        void OnNonKillableMinions(object sender, NonKillableMinionEventArgs args);
+        void Execute(T sender, TE args);
     }
 }

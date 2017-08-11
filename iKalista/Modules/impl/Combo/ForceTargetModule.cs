@@ -10,8 +10,9 @@ using iKalista.Utils;
 
 namespace iKalista.Modules.impl.Combo
 {
-    class ForceTargetModule : IPreAttackModule
+    class ForceTargetModule : IEventModule<Obj_AI_Base, PreAttackEventArgs>
     {
+
         public void OnLoad()
         {
 
@@ -32,7 +33,7 @@ namespace iKalista.Modules.impl.Combo
             return ModuleType.PreAttack;
         }
 
-        public void OnPreAttack(Obj_AI_Base sender, PreAttackEventArgs args)
+        public void Execute(Obj_AI_Base sender, PreAttackEventArgs args)
         {
             if (sender.IsMe)
                 return;

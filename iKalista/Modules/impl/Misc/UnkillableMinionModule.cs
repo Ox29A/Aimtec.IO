@@ -11,7 +11,7 @@ using iKalista.Utils;
 
 namespace iKalista.Modules.impl.Misc
 {
-    class UnkillableMinionModuleModule : IUnkillableMinionModule
+    class UnkillableMinionModuleModule : IEventModule<object, NonKillableMinionEventArgs>
     {
         public void OnLoad()
         {
@@ -33,7 +33,7 @@ namespace iKalista.Modules.impl.Misc
             return ModuleType.OnUnkillableMinion;
         }
 
-        public void OnNonKillableMinions(object minion, NonKillableMinionEventArgs args)
+        public void Execute(object minion, NonKillableMinionEventArgs args)
         {
             var killableMinion = minion as Obj_AI_Base;
             if (killableMinion == null || !Variables.Spells[SpellSlot.E].Ready

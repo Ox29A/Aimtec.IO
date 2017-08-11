@@ -52,7 +52,7 @@ namespace iKalista.Utils
         /// <summary>
         ///     Checks if the given target is un kill able :(
         /// </summary>
-        /// <param name="target">THE TARGET AGAIN</param>
+        /// <param name="hero">THE TARGET AGAIN</param>
         /// <returns>true / false given the buffs the target has kappa</returns>
         public static bool HasInvulnerability(this Obj_AI_Base hero)
         {

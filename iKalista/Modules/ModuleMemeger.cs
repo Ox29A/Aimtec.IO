@@ -24,64 +24,32 @@ namespace iKalista.Modules
 
         public static void Initialize()
         {
-            Game.OnUpdate += OnUpdate;
-            Orbwalker.Implementation.PreAttack += OnPreAttack;
-            Orbwalker.Implementation.PostAttack += OnPostAttack;
-            Variables.Orbwalker.OnNonKillableMinion += OnNonKillableMinion;
-            Obj_AI_Base.OnProcessSpellCast += OnSpellCast;
-
             foreach (var module in ModuleList)
                 module.OnLoad();
-        }
 
-        private static void OnSpellCast(Obj_AI_Base sender, Obj_AI_BaseMissileClientDataEventArgs e)
-        {
-            foreach (var m in ModuleList.Where(x => x.ShouldExecute()))
-                if (m.GetType().GetInterfaces().Contains(typeof(ISpellCastModule)))
-                {
-                    var module = m as ISpellCastModule;
-                    module?.OnSpellCast(sender, e);
-                }
-        }
-
-        private static void OnPreAttack(object sender, PreAttackEventArgs preAttackEventArgs)
-        {
-            foreach (var m in ModuleList.Where(x => x.ShouldExecute()))
-                if (m.GetType().GetInterfaces().Contains(typeof(IPreAttackModule)))
-                {
-                    var module = m as IPreAttackModule;
-                    module?.OnPreAttack(sender as Obj_AI_Base, preAttackEventArgs);
-                }
-        }
-
-        private static void OnPostAttack(object sender, PostAttackEventArgs postAttackEventArgs)
-        {
-            foreach (var m in ModuleList.Where(x => x.ShouldExecute()))
-                if (m.GetType().GetInterfaces().Contains(typeof(IPostAttackModule)))
-                {
-                    var module = m as IPostAttackModule;
-                    module?.OnPostAttack(sender as Obj_AI_Base, postAttackEventArgs);
-                }
-        }
-
-        private static void OnNonKillableMinion(object sender, NonKillableMinionEventArgs e)
-        {
-            foreach (var m in ModuleList.Where(x => x.ShouldExecute()))
-                if (m.GetType().GetInterfaces().Contains(typeof(IUnkillableMinionModule)))
-                {
-                    var module = m as IUnkillableMinionModule;
-                    module?.OnNonKillableMinions(sender, e);
-                }
+            Game.OnUpdate += OnUpdate;
+            Orbwalker.Implementation.PreAttack += RunEventModule;
+            Orbwalker.Implementation.PostAttack += RunEventModule;
+            Variables.Orbwalker.OnNonKillableMinion += RunEventModule;
+            Obj_AI_Base.OnProcessSpellCast += RunEventModule;
         }
 
         private static void OnUpdate()
         {
-            foreach (var m in ModuleList.Where(x => x.ShouldExecute()))
-                if (m.GetType().GetInterfaces().Contains(typeof(IOnUpdateModule)))
-                {
-                    var module = m as IOnUpdateModule;
-                    module?.Execute();
-                }
+            foreach (var module in ModuleList.Where(
+                x => x.ShouldExecute() && x.GetType().GetInterfaces().Contains(typeof(IUpdateModule))))
+            {
+                var updateModule = module as IUpdateModule;
+                updateModule?.Execute();
+            }
+        }
+
+        public static void RunEventModule<T, TE>(T sender, TE args)
+        {
+            foreach (var module in ModuleList.Where(x => x.ShouldExecute() && x.GetType().GetInterfaces().Contains(typeof(IEventModule<T, TE>))))
+            {
+                (module as IEventModule<T, TE>)?.Execute(sender, args);
+            }
         }
     }
 }

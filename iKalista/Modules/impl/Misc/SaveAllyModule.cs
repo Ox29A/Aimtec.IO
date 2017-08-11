@@ -10,7 +10,7 @@ using GameObjects = iKalista.Utils.GameObjects;
 
 namespace iKalista.Modules.impl.Misc
 {
-    internal class SaveAllyModule : IOnUpdateModule, ISpellCastModule
+    internal class SaveAllyModule : IUpdateModule, IEventModule<Obj_AI_Base, Obj_AI_BaseMissileClientDataEventArgs>
     {
         private static readonly Dictionary<float, float> IncDamage = new Dictionary<float, float>();
         private static readonly Dictionary<float, float> InstDamage = new Dictionary<float, float>();
@@ -53,7 +53,7 @@ namespace iKalista.Modules.impl.Misc
 
         public ModuleType GetModuleType() => ModuleType.OnUpdate;
 
-        public void OnSpellCast(Obj_AI_Base sender, Obj_AI_BaseMissileClientDataEventArgs args)
+        public void Execute(Obj_AI_Base sender, Obj_AI_BaseMissileClientDataEventArgs args)
         {
             if (!sender.IsEnemy)
                 return;

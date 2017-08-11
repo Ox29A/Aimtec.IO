@@ -42,6 +42,7 @@
                         }
                         wMenu.Add(polymorphMenu);
                     }
+                    var spellMenu = new Menu("spell", ">> Spell Settings");
                     comboSettings.Add(wMenu);
                 }
 
@@ -76,7 +77,7 @@
                 autoShieldMenu.Add(priorityMenu);
                 Variables.Menu.Add(autoShieldMenu);
             }
-
+            
             var speedyMenu = new Menu("speedy", ">> Speedy Gonzales");
             {
                 foreach (var ally in GameObjects.AllyHeroes.Where(x => !x.IsMe))

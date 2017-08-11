@@ -5,13 +5,11 @@ namespace iLulu.Modules.UpdateModules
     using System.Linq;
 
     using Aimtec;
-    using Aimtec.SDK.Damage;
-    using Aimtec.SDK.Damage.JSON;
     using Aimtec.SDK.Extensions;
     using Aimtec.SDK.Util.Cache;
 
-    using iLulu.Interfaces;
-    using iLulu.Utils;
+    using Interfaces;
+    using Utils;
 
     using ZLib.Base;
     using ZLib.Handlers;
@@ -80,7 +78,6 @@ namespace iLulu.Modules.UpdateModules
                 // Checks if any of the incoming spells are either crowd control spells, or Ultimates
                 if (sender.Events.Contains(EventType.CrowdControl) || sender.Events.Contains(EventType.Ultimate))
                 {
-
                     // Checks if any enemies are within 1000 units of our given ally.
                     if (ally.CountEnemyHeroesInRange(1000) > 0)
                     {
@@ -90,7 +87,7 @@ namespace iLulu.Modules.UpdateModules
                 }
 
                 // Calculates the percent damage incoming to our ally.
-                var incomingDamagePercent = sender.IncomeDamage / sender.Instance.Health * 100;
+                var incomingDamagePercent = sender.IncomeDamage / sender.Instance.MaxHealth * 100;
 
                 // Checks if our ally is going to die from incoming spell, or if the damage from the incoming spell will deal more then 50% health
                 // Also checks if allys health percent is lower then given percent in menu, if any of the cases met, should cast E on ally.

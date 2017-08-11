@@ -8,7 +8,7 @@ using iKalista.Utils;
 
 namespace iKalista.Modules.impl.Combo
 {
-    internal class AutoQModule : IOnUpdateModule
+    internal class AutoQModule : IUpdateModule
     {
         public void OnLoad()
         {

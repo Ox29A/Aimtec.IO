@@ -8,7 +8,7 @@ using iKalista.Utils;
 
 namespace iKalista.Modules.impl.Misc
 {
-    internal class KillstealModule : IOnUpdateModule
+    internal class KillstealModule : IUpdateModule
     {
         public void OnLoad()
         {

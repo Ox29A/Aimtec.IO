@@ -11,7 +11,7 @@ using GameObjects = iKalista.Utils.GameObjects;
 
 namespace iKalista.Modules.impl.Combo
 {
-    internal class AutoEModule : IOnUpdateModule
+    internal class AutoEModule : IUpdateModule
     {
         public ModuleType GetModuleType()
         {
@@ -30,7 +30,7 @@ namespace iKalista.Modules.impl.Combo
 
         public bool ShouldExecute()
         {
-            return Variables.Spells[SpellSlot.E].Ready && Variables.Menu["com.ikalista.combo"][this.GetName()].Enabled;
+            return Variables.Spells[SpellSlot.E].Ready;
         }
 
         public void Execute()

@@ -59,7 +59,6 @@
     <Compile Include="Modules\impl\Misc\SaveAllyModule.cs" />
     <Compile Include="Modules\IModule.cs" />
     <Compile Include="Modules\impl\Misc\UnkillableMinionModule.cs" />
-    <Compile Include="Modules\ModuleGenerator.cs" />
     <Compile Include="Modules\ModuleMemeger.cs" />
     <Compile Include="Modules\ModuleType.cs" />
     <Compile Include="Program.cs" />

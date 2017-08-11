@@ -11,7 +11,7 @@ using GameObjects = iKalista.Utils.GameObjects;
 
 namespace iKalista.Modules.impl.Misc
 {
-    class BalistaModule : IOnUpdateModule
+    class BalistaModule : IUpdateModule
     {
         public void OnLoad()
         {
