@@ -35,7 +35,7 @@ namespace iKalista.Modules.impl.Combo
 
             var prediction = Variables.Spells[SpellSlot.Q].GetPrediction(target);
 
-            if (prediction.HitChance >= HitChance.Medium && Variables.Orbwalker.IsWindingUp || !ObjectManager.GetLocalPlayer().IsDashing())
+            if (prediction.HitChance >= HitChance.Medium && Variables.Orbwalker.IsWindingUp || ObjectManager.GetLocalPlayer().IsDashing())
                 Variables.Spells[SpellSlot.Q].Cast(prediction.CastPosition);
         }
 
