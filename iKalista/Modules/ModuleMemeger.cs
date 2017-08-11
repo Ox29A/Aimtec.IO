@@ -32,6 +32,7 @@ namespace iKalista.Modules
             Orbwalker.Implementation.PostAttack += RunEventModule;
             Variables.Orbwalker.OnNonKillableMinion += RunEventModule;
             Obj_AI_Base.OnProcessSpellCast += RunEventModule;
+            ZLib.ZLib.OnPredictDamage += RunEventModule;
         }
 
         private static void OnUpdate()

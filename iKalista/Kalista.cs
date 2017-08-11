@@ -1,10 +1,12 @@
-﻿using Aimtec;
+﻿using System.Linq;
+using Aimtec;
 using Aimtec.SDK.Menu;
 using Aimtec.SDK.Menu.Components;
 using Aimtec.SDK.Orbwalking;
 using Aimtec.SDK.Prediction.Skillshots;
 using iKalista.Modules;
 using iKalista.Utils;
+using ZLib.Base;
 
 namespace iKalista
 {
@@ -47,7 +49,16 @@ namespace iKalista
 
                 comboMenu.Add(new MenuBool("useR", "Save Ally with R"));
                 comboMenu.Add(new MenuSlider("allyPercent", "Percent Health for ally to save", 20, 5));
-                
+
+                /*var dangerSpells = new Menu("dangerSpells", "Dangerous Spells");
+                {
+                    foreach (var spell in ZLib.ZLib.CachedSpells.Where(x => x.EventTypes.Contains(EventType.Danger)))
+                    {
+                        dangerSpells.Add(new MenuBool(spell.SpellName, spell.ChampionName + " (" + spell.Slot + ")"));
+                    }
+                    comboMenu.Add(dangerSpells);
+                }*/
+
                 Variables.Menu.Add(comboMenu);
             }
 

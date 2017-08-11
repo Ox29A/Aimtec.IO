@@ -6,21 +6,17 @@ using Aimtec.SDK.Damage;
 using Aimtec.SDK.Extensions;
 using Aimtec.SDK.Util.Cache;
 using iKalista.Utils;
+using ZLib.Base;
+using ZLib.Handlers;
 using GameObjects = iKalista.Utils.GameObjects;
 
 namespace iKalista.Modules.impl.Misc
 {
-    internal class SaveAllyModule : IUpdateModule, IEventModule<Obj_AI_Base, Obj_AI_BaseMissileClientDataEventArgs>
+    internal class SaveAllyModule : IUpdateModule, IEventModule<Unit, PredictDamageEventArgs>
     {
-        private static readonly Dictionary<float, float> IncDamage = new Dictionary<float, float>();
-        private static readonly Dictionary<float, float> InstDamage = new Dictionary<float, float>();
         public static Obj_AI_Hero SoulBoundAlly;
 
-        public static float IncomingDamage
-        {
-            get { return IncDamage.Sum(e => e.Value) + InstDamage.Sum(e => e.Value); }
-        }
-
+        
         public void OnLoad()
         {
 
@@ -37,25 +33,47 @@ namespace iKalista.Modules.impl.Misc
                 SoulBoundAlly =
                     GameObjects.AllyHeroes.ToList().Find(
                         h => !h.IsMe && h.Buffs.Any(b => b.Caster.IsMe && b.Name == "kalistacoopstrikeally"));
-
-            if (SoulBoundAlly.HealthPercent() <
-                Variables.Menu["com.ikalista.combo"]["allyPercent"].Value &&
-                SoulBoundAlly.CountEnemyChampionsInRange(500) > 0 ||
-                IncomingDamage > SoulBoundAlly.Health)
-                Variables.Spells[SpellSlot.R].Cast();
-
-            foreach (var entry in IncDamage.Where(entry => entry.Key < Game.TickCount).ToArray())
-                IncDamage.Remove(entry.Key);
-
-            foreach (var entry in InstDamage.Where(entry => entry.Key < Game.TickCount).ToArray())
-                InstDamage.Remove(entry.Key);
         }
 
         public ModuleType GetModuleType() => ModuleType.OnUpdate;
 
+
+        public void Execute(Unit unit, PredictDamageEventArgs args)
+        {
+            //Cast unit to OBJ_AI_Hero fam.
+            var sender = unit.Instance as Obj_AI_Hero;
+
+            // Our unit is null, don't do anything now.
+            if (sender == null)
+                return;
+
+            var shouldCast = SoulBoundAlly != null && sender.ChampionName.Equals(SoulBoundAlly.ChampionName);
+
+            if (shouldCast && ObjectManager.GetLocalPlayer().Distance(SoulBoundAlly) <=
+                Variables.Spells[SpellSlot.E].Range)
+            {
+                if (unit.Events.Contains(EventType.Danger) || unit.Events.Contains(EventType.Ultimate))
+                {
+                    if (sender.CountEnemyChampionsInRange(2000) > 0)
+                    {
+                        Variables.Spells[SpellSlot.R].Cast();
+                        return;
+                    }
+                }
+
+                var incomingDamagePercent = unit.IncomeDamage / sender.MaxHealth * 100;
+
+                if (unit.IncomeDamage >= sender.Health || incomingDamagePercent >= 50 || sender.HealthPercent() <=
+                    Variables.Menu["com.ikalista.combo"]["allyPercent"].Value)
+                {
+                    Variables.Spells[SpellSlot.R].Cast();
+                }
+            }
+        }
+
         public void Execute(Obj_AI_Base sender, Obj_AI_BaseMissileClientDataEventArgs args)
         {
-            if (!sender.IsEnemy)
+            /*if (!sender.IsEnemy)
                 return;
 
             if (SoulBoundAlly == null)
@@ -85,7 +103,7 @@ namespace iKalista.Modules.impl.Misc
                         args.End.Distance(SoulBoundAlly.ServerPosition) <
                         Math.Pow(args.SpellData.LineWidth, 2))
                         InstDamage[Game.TickCount + 2] = (float) attacker.GetSpellDamage(SoulBoundAlly, slot);
-            }
+            }*/
         }
     }
 }
